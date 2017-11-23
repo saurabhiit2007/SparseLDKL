@@ -9,7 +9,6 @@
 #include<stdlib.h>
 #include"string.h"
 #include"../include/Utils.h"
-//#include"../include/Timer.h"
 #include"../include/Model.h"
 #include"../include/Evaluate.h"
 #define LABEL(X) X > 0 ? 1 : -1
@@ -79,13 +78,11 @@ int main(int argc, char** argv){
 		LoadModel(buf,model);
 		
         	// Prediction
-		//Tm.StartTimer();
 		stime = clock();
 		Correct = Evaluate(model);
 		etime = clock();
 
 		float elapsedTime = (etime-stime)*1000.0/CLOCKS_PER_SEC;
-		//Tm.StopTimer();
         
 		Input.TestAcc[i] = (MyFloat)Correct/(MyFloat)model.N;
 		Input.TestTime[i] = elapsedTime;

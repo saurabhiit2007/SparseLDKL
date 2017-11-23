@@ -10,7 +10,6 @@
 #include "string.h"
 #include "algorithm"
 #include"../include/Utils.h"
-//#include"../include/Timer.h"
 #include"../include/Solver.h"
 #include"../include/Model.h"
 
@@ -88,7 +87,6 @@ int main(int argc, char** argv){
 		srand(unsigned(1));
 	else
 		srand(time(NULL));
-	//Timer Tm;
 	ParseInput(argc,argv,model);
 	char buf[1024]; 
 	cout << "Running SparseLDKL with following parameters on " << model.DataFile << endl;
@@ -127,7 +125,6 @@ int main(int argc, char** argv){
 		for(int w1=0;w1<(model.M-1)*model.D;w1++)
 		    ThCounter[w1] = 1;
 
-		//Tm.StartTimer();
 	        stime = clock();
         
 		// Iterative Hard Thresholding with relaxed budget
@@ -156,10 +153,8 @@ int main(int argc, char** argv){
         	etime = clock();
         	float elapsedTime = (etime-stime)*1000.0/CLOCKS_PER_SEC;
         	cout << "Training Time : " << elapsedTime << endl;
-		//Tm.StopTimer();
 			
 		model.TrainTime[i] = elapsedTime;
-		//cout << "Training Time : "<< model.TrainTime[i] << endl;
 		sprintf(buf,"%s%d",model.ModelFile,i+1);
 		SaveModel(buf, model);
 		delete[] model.W;
