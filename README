@@ -1,0 +1,82 @@
+
+SparseLDKL
+
+=====
+SparseLDKL is a machine learning algorithm developed especially for resource constrained IoT devices. These devices are severely constrained in terms of working memory, storage space and compute power. For more details on this algorithm refer to the MS Thesis present on the link : https://saurabhiit2007.github.io/Saurabh_MS_Thesis.pdf
+
+Usage
+======
+
+Training: The command
+
+> Train [Options] TrainingDataFile [ModelFile]
+
+reads in training data from TrainingDataFile and saves the learnt SparseLDKL model in ModelFile subject to the following options
+
+-D   : Depth of the SparseLDKL tree.
+-lW  : lambdaW = regularizer for classifier parameter W  (try : 0.1, 0.01 or 0.001).
+-lT  : lambdatheta = regularizer for kernel parameter \theta  (try : 0.1, 0.01 or 0.001).
+-lP  : lambdatheta' = regularizer for kernel parameters \theta'  (try : 0.1, 0.01 or 0.001).
+-S   : sigma = parameter for sigmoid sharpness  (try : 1.0, 0.1 or 0.01).
+-Z   : totalNonZero = total number of non-zero entries in final pruned model (depends on the Memory Budget constraint).
+-N   : [Optional: default 1] Number of times to train SparseLDKL with different random initializations.
+-I   : [Optional: default 15000] Number of passes through the dataset.
+TrainingDataFile : File containing training data.
+ModelFile        : [Optional: default TrainingDataFile.model] Files containing the models learnt by SparseLDKL. For example, given the command Train -N 5 ... banana.train, SparseLDKL will learn 5 different models and store them in banana.train.model1, ..., banana.train.model5.
+Please refer to the included MS Thesis for the parameter definitions and to the included Run_script for common parameter settings.
+
+Testing: The command
+
+> Predict ModelFile TestDataFile [options]
+
+applies the learnt SparseLDKL classifier in ModelFile to the test data in TestFile and saves the predictions subject to the following options
+
+ModelFile    : The base name of the files containing the learnt SparseLDKL models. This argument should be the same as the ModelFile argument used during training. For example, if the learn SparseLDKL models were stored in banana.train.model1, ..., banana.train.model5 then ModelFile should be set to banana.train.
+TestDataFile : File containing test data.
+-N : [Optional: default 1] Number of models over which SparseLDKL's predictions will be averaged. Note that this cannot be greater than the argument used in -N during training.
+-R : [Optional: default Result.txt] Result filename.
+
+The result of classification are saved in $DATASET_NAME$.output$Model_Number$ file. For example, if you learn 5 different models for banana dataset, and then predict the output for each model, the output will be saved in "banana.output1"  to "banana.output5" files. The file contain 1 line for each instance. Each line contain classification score followed by class label for the instance.
+ 
+Source Files:
+============
+The ./include directory contains all the headers, and the ./src directory contains all the .cpp files. Timer.h contain implementation of high precision timer for windows and linux system. Solver.cpp and Solver.h contain the main training routine for SparseLDKL. Model.cpp and Model.h contain definition of Model and functions for reading and writing model files. Utils.cpp and Utils.h contain function for loading data and vector operations. Predict.cpp and Evaluate.cpp contain main prediction functions.
+
+To build from source in linux, simply type make in the terminal. While compiling in windows, change the line
+
+#define WINDOWS 0
+
+in include/Timer.h to
+
+#define WINDOWS 1
+
+Also, set the PATH VARIABLE to include CL.EXE before running Makefile.bat (Presently this is done by following line in Makefile.bat: call "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 or amd64) where x86 and amd64 selects appropriate architecture. You can also change it to any other compiler by modifying the compiler variable (CXX) in Makefile.bat and calling appropriate script for setting compiler variables.
+
+
+Data File Format(For Train/Test)
+================
+Dense Format
+-------------
+Line 1: N D 	(where N is number of data points and D in dimension of each data point.)
+Line 2: <Label of Point 1> <Value1> ... <ValueD> (without <>)
+Line 3: <Label of Point 2> <Value1> ... <ValueD> (without <>)
+.
+.
+.
+Line N+1: <Label of Point N> <Value1> ... <ValueD> (without <>)
+
+Each line contain an instance and is ended by a '\n' (new line) character. Label is an integer {+1.0, -1.0} indicating the class label. Labels in the test file are only used to calculate accuracy. All the datapoints are appended with an extra dimension with value 1.0 in end while reading the data file. This is to take care for 'b' (bias) in classifier.
+
+
+Model File Format
+=================
+Line 1: D M (Where D is dimension(Data dimension + 1) and M is number of leaf nodes.)
+Line 2: lW lTheta lThetaPrime Sigma
+Line 3 onwards: 
+L Lines containing rows of LxD W Matrix where L = 2M-1.
+L Lines containing rows of LxD ThetaPrime Matrix.
+M Lines containing rows of MxD ThetaMatrix
+
+Each line is ended by a '\n' character.
+ 
+========================================================================================================================================================================================================================================================================================================================================================================================================================

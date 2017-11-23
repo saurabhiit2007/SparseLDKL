@@ -1,0 +1,16 @@
+#!/bin/sh
+mkdir Results
+mkdir Models
+base='datasets/'
+NRun=5
+
+#Banana
+Name='banana'
+D=3
+lW=0.1
+lT=0.001
+lP=0.01
+S=0.01
+Z=50
+./Train -D $D -lW $lW -lT $lT -lP $lP -Z $Z -S $S -N $NRun $base$Name'.train' 'Models/'$Name 
+./Predict 'Models/'$Name $base$Name'.test' -N $NRun -R 'Results/'$Name'.result'
