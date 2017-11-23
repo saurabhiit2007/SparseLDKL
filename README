@@ -46,7 +46,7 @@ To build from source in linux, simply type make in the terminal. While compiling
 
 #define WINDOWS 0
 
-in include/Timer.h to
+in include/Utils.h to
 
 #define WINDOWS 1
 
