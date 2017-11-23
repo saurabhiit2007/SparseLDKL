@@ -40,7 +40,7 @@ The result of classification are saved in $DATASET_NAME$.output$Model_Number$ fi
  
 Source Files:
 ============
-The ./include directory contains all the headers, and the ./src directory contains all the .cpp files. Timer.h contain implementation of high precision timer for windows and linux system. Solver.cpp and Solver.h contain the main training routine for SparseLDKL. Model.cpp and Model.h contain definition of Model and functions for reading and writing model files. Utils.cpp and Utils.h contain function for loading data and vector operations. Predict.cpp and Evaluate.cpp contain main prediction functions.
+The ./include directory contains all the headers, and the ./src directory contains all the .cpp files. Solver.cpp and Solver.h contain the main training routine for SparseLDKL. Model.cpp and Model.h contain definition of Model and functions for reading and writing model files. Utils.cpp and Utils.h contain function for loading data and vector operations. Predict.cpp and Evaluate.cpp contain main prediction functions.
 
 To build from source in linux, simply type make in the terminal. While compiling in windows, change the line
 
